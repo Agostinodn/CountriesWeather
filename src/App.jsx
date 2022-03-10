@@ -6,14 +6,11 @@ function App() {
   const [findCountries, setFindCountries] = useState("");
   useEffect(async () => {
     axios.get("https://restcountries.com/v2/all").then((response) => {
-      // console.log("promise fulfilled");
-      // console.log(response.data);
       setAllCountries(response.data);
     });
   }, []);
 
   const handleChange = (e) => {
-    // console.log(e.target.value);
     setFindCountries(e.target.value);
   };
 
@@ -22,7 +19,6 @@ function App() {
   );
 
   const showCountire = (name) => {
-    // console.log(name);
     setFindCountries(name);
   };
 
@@ -45,9 +41,6 @@ function App() {
 export default App;
 
 const Countrie = ({ filteredCountires, showCountire }) => {
-  // console.log(filteredCountires);
-  // console.log("length: ", filteredCountires.length);
-
   if (filteredCountires.length > 25) {
     return <p className="m-5 p-5">To many matches, specify another filter </p>;
   } else if (
@@ -85,19 +78,17 @@ const Countrie = ({ filteredCountires, showCountire }) => {
 };
 
 const SingleCountrie = ({ countrie }) => {
-  // console.log(countrie);
   const { name, capital, area, languages, flag } = countrie;
   const [weather, setWeather] = useState([]);
 
   useEffect(async () => {
-    const api_key = "0a4d686a0e9f03d57fc7d4e1e25bdff5";
+    const api_key = process.env.REACT_APP_API_KEY;
     axios
       .get(
         `https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=${api_key}`
       )
       .then((response) => {
         const apiResponse = response.data;
-        // console.log(apiResponse);
         setWeather([apiResponse]);
       })
       .catch((e) => {
@@ -126,7 +117,7 @@ const SingleCountrie = ({ countrie }) => {
         </div>
         <div className="mt-5">
           <h3>Weather in {capital}</h3>
-          <img src={icon} />
+          <img src={icon} alt="weather icon" />
           <p>Temperature: {currentWeather?.main?.temp} °</p>
           <p>Wind: {currentWeather?.wind?.speed} m/s</p>
         </div>
